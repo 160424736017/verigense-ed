@@ -46,32 +46,32 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/dashboard",
+      url: "/student/dashboard",
       icon: IconDashboard,
     },
     {
       title: "Grades",
-      url: "/grades",
+      url: "/student/grades",
       icon: IconSchool,
     },
     {
       title: "Payments",
-      url: "/payments",
+      url: "/student/payments",
       icon: IconCreditCard,
     },
     {
       title: "Notices",
-      url: "/notices",
+      url: "/student/notices",
       icon: IconBell,
     },
     {
       title: "Study Materials",
-      url: "/study-materials",
+      url: "/student/study-materials",
       icon: IconBook,
     },
     {
       title: "Assignments",
-      url: "/assignments",
+      url: "/student/assignments",
       icon: IconClipboardList,
     },
   ],

@@ -121,8 +121,18 @@ export function AttendanceWidget({
                   ))}
                   <Label
                     content={({ viewBox }) => {
-                      if (!viewBox || typeof viewBox.cx !== "number" || typeof viewBox.cy !== "number")
-                        return null
+                      if (!viewBox) return null;
+                      
+                      // Type guard to check if viewBox has cx and cy properties
+                      const isPieViewBox = (viewBox: any): viewBox is { cx: number; cy: number } => {
+                        return (
+                          typeof viewBox.cx === "number" &&
+                          typeof viewBox.cy === "number"
+                        );
+                      };
+                      
+                      if (!isPieViewBox(viewBox)) return null;
+                      
                       return (
                         <text
                           x={viewBox.cx}
@@ -140,7 +150,7 @@ export function AttendanceWidget({
                           </tspan>
                           <tspan
                             x={viewBox.cx}
-                            y={(viewBox.cy || 0) + 26}
+                            y={viewBox.cy + 26}
                             className="fill-muted-foreground text-xs"
                           >
                             Overall attendance
