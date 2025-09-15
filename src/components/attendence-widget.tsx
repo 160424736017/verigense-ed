@@ -19,7 +19,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-type AttendanceStatus = "present" | "absent" | "late" | "excused"
+type AttendanceStatus = "present" | "absent" | "excused"
 
 type AttendanceSlice = {
   status: AttendanceStatus
@@ -45,7 +45,6 @@ interface AttendanceWidgetProps {
 const DEFAULT_DATA: AttendanceSlice[] = [
   { status: "present", label: "Present", count: 42, fill: "var(--chart-1)" },
   { status: "absent", label: "Absent", count: 5, fill: "var(--chart-2)" },
-  { status: "late", label: "Late", count: 3, fill: "var(--chart-3)" },
   { status: "excused", label: "Excused", count: 2, fill: "var(--chart-4)" },
 ]
 
@@ -53,7 +52,6 @@ const chartConfig = {
   visitors: { label: "Attendance" },
   present: { label: "Present", color: "var(--chart-1)" },
   absent: { label: "Absent", color: "var(--chart-2)" },
-  late: { label: "Late", color: "var(--chart-3)" },
   excused: { label: "Excused", color: "var(--chart-4)" },
 } satisfies ChartConfig
 
@@ -67,37 +65,18 @@ export function AttendanceWidget({
     const map: Record<AttendanceStatus, number> = {
       present: 0,
       absent: 0,
-      late: 0,
       excused: 0,
     }
     for (const d of data) {
       map[d.status] = (map[d.status] || 0) + (Number(d.count) || 0)
     }
-    const total = map.present + map.absent + map.late + map.excused
+    const total = map.present + map.absent + map.excused
     const effectivePresent = map.present + (treatExcusedAsPresent ? map.excused : 0)
     const percent = total === 0 ? 0 : Math.round((effectivePresent / total) * 10000) / 100
     return { map, total, effectivePresent, percent }
   }, [data, treatExcusedAsPresent])
 
   const totalCount = totals.total
-  const centerText =
-    totalCount === 0 ? (
-      <>
-        <tspan className="fill-foreground text-2xl font-semibold">—</tspan>
-        <tspan x="50%" dy="24" className="fill-muted-foreground text-xs" textAnchor="middle">
-          No data
-        </tspan>
-      </>
-    ) : (
-      <>
-        <tspan className="fill-foreground text-3xl font-bold">
-          {totals.percent.toFixed(0)}%
-        </tspan>
-        <tspan x="50%" dy="24" className="fill-muted-foreground text-xs" textAnchor="middle">
-          Overall attendance
-        </tspan>
-      </>
-    )
 
   // Rechart Pie data expects objects with name/key and value
   const chartData = React.useMemo(
@@ -113,13 +92,16 @@ export function AttendanceWidget({
 
   return (
     <Card className="flex flex-col">
+      {/* Header Section */}
       <CardHeader className="items-center pb-0">
         <CardTitle>Attendance</CardTitle>
         <CardDescription>{periodLabel}</CardDescription>
       </CardHeader>
 
+      {/* Chart and Legend Section */}
       <CardContent className="flex-1 pb-0">
         <div className="flex flex-col md:flex-row items-center gap-6">
+          {/* Chart Section */}
           <div className="flex-1">
             <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[260px]">
               <PieChart role="img" aria-label={`Attendance donut chart. ${totals.percent}% overall`}>
@@ -172,10 +154,10 @@ export function AttendanceWidget({
             </ChartContainer>
           </div>
           
-          {/* Legend moved to the side */}
+          {/* Legend Section */}
           <div className="flex-1 w-full">
             <div className="space-y-3">
-              {(["present", "absent", "late", "excused"] as AttendanceStatus[]).map((status, i) => {
+              {(["present", "absent", "excused"] as AttendanceStatus[]).map((status, i) => {
                 const count = totals.map[status] ?? 0
                 const percent = totals.total === 0 ? 0 : Math.round((count / totals.total) * 10000) / 100
                 const color =
@@ -209,8 +191,8 @@ export function AttendanceWidget({
         </div>
       </CardContent>
 
+      {/* Footer Section */}
       <CardFooter className="flex-col gap-3 text-sm">
-        {/* Footer: sync info and short note */}
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2 leading-none">
             <span className="text-muted-foreground text-xs">
