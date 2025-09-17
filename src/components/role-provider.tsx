@@ -32,6 +32,9 @@ export function RoleProvider({
     validatedRole = userRole as 'student' | 'teacher' | 'admin'
   }
   
+  // Check if we're already inside a RoleProvider
+  const context = React.useContext(RoleContext)
+  
   // If we don't want to show the sidebar, just render children
   if (!showSidebar) {
     console.log("Not showing sidebar, rendering children only")
@@ -39,9 +42,6 @@ export function RoleProvider({
   }
   
   console.log("RoleProvider using validated role:", validatedRole)
-  
-  // Check if we're already inside a RoleProvider
-  const context = React.useContext(RoleContext)
   
   // If we're already inside a RoleProvider, just render children
   if (context.hasSidebar) {

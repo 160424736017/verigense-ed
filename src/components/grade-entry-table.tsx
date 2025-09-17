@@ -412,18 +412,30 @@ export function GradeEntryTable({ data = [], includeComments = false, onDataChan
   // Local state for grade data
   const [localData, setLocalData] = React.useState<GradeEntry[]>(() => [...data])
   
-  // Ref to track the last processed data to prevent infinite loops
-  const lastProcessedDataRef = React.useRef<string>(JSON.stringify(data))
+  // Ref to track the previous data
+  const prevDataRef = React.useRef<GradeEntry[]>(data)
   
-  // Update local data when prop data changes - with proper dependency handling
+  // Update local data when prop data changes
   React.useEffect(() => {
-    const currentDataString = JSON.stringify(data)
-    // Only update if the data has actually changed and is not empty
-    if (data.length > 0 && currentDataString !== lastProcessedDataRef.current) {
+    // Check if data has actually changed by comparing lengths and each item
+    const hasChanged = data.length !== prevDataRef.current.length || 
+      data.some((item, index) => {
+        const prevItem = prevDataRef.current[index]
+        return item.id !== prevItem.id || 
+               item.studentName !== prevItem.studentName ||
+               item.studentId !== prevItem.studentId ||
+               item.assignment !== prevItem.assignment ||
+               item.grade !== prevItem.grade ||
+               item.maxPoints !== prevItem.maxPoints ||
+               item.status !== prevItem.status ||
+               item.comments !== prevItem.comments
+      })
+    
+    if (hasChanged && data.length > 0) {
       setLocalData([...data])
-      lastProcessedDataRef.current = currentDataString
+      prevDataRef.current = data
     }
-  }, [JSON.stringify(data)]) // Use JSON.stringify to properly compare array contents
+  }, [data])
   
   // Function to update grade for a student
   const updateGrade = (id: string, value: string | number) => {

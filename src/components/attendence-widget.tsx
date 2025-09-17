@@ -125,10 +125,11 @@ export function AttendanceWidget({
                       if (!viewBox) return null;
                       
                       // Type guard to check if viewBox has cx and cy properties
-                      const isPieViewBox = (viewBox: any): viewBox is { cx: number; cy: number } => {
+                      const isPieViewBox = (viewBox: unknown): viewBox is { cx: number; cy: number } => {
+                        if (!viewBox || typeof viewBox !== 'object') return false;
                         return (
-                          typeof viewBox.cx === "number" &&
-                          typeof viewBox.cy === "number"
+                          'cx' in viewBox && typeof (viewBox as { cx: number }).cx === "number" &&
+                          'cy' in viewBox && typeof (viewBox as { cy: number }).cy === "number"
                         );
                       };
                       

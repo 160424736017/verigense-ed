@@ -7,6 +7,63 @@ import { Button } from "@/components/ui/button"
 import { Download, Share2, FileText, AlertTriangle, TrendingUp, BarChart3, CheckCircle, XCircle, Clock } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 
+// Define types for our data
+interface SemesterData {
+  cumulativeGPA: number
+  cumulativePercentage: number
+  currentSemesterGPA: number
+  currentSemesterCGPA: number
+  creditsEarned: number
+  creditsRequired: number
+  graduationPercentage: number
+  badges: Array<{
+    id: number
+    text: string
+    variant: "default" | "destructive"
+  }>
+}
+
+interface SemesterTab {
+  id: string
+  label: string
+}
+
+interface Grade {
+  id: number
+  subject: string
+  internal: string
+  external: string
+  finalGrade: string
+  credits: number
+  status: string
+}
+
+interface GradesData {
+  sem1: Grade[]
+  sem2: Grade[]
+}
+
+interface BacklogData {
+  id: number
+  subject: string
+  semester: string
+  credits: number
+  nextOpportunity: string
+}
+
+interface CreditsData {
+  completed: number
+  remaining: number
+  coreSubjects: number
+  electives: number
+  labs: number
+}
+
+interface ForecastingData {
+  id: number
+  message: string
+}
+
 // Mock data for the grades page
 const semesterData = {
   cumulativeGPA: 3.75,
@@ -29,7 +86,7 @@ const semesterTabs = [
   { id: "sem4", label: "Semester 4" }
 ]
 
-const gradesData = {
+const gradesData: GradesData = {
   sem1: [
     { id: 1, subject: "Mathematics", internal: "26/30", external: "62/70", finalGrade: "A", credits: 4, status: "passed" },
     { id: 2, subject: "Physics", internal: "22/30", external: "45/70", finalGrade: "B", credits: 3, status: "passed" },
@@ -118,7 +175,7 @@ export default function GradesPage() {
                     {/* Badges Section */}
                     <div className="md:col-span-2 lg:col-span-4 flex flex-wrap gap-2">
                       {semesterData.badges.map((badge) => (
-                        <Badge key={badge.id} variant={badge.variant as any}>
+                        <Badge key={badge.id} variant={badge.variant as "default" | "destructive"}>
                           {badge.text}
                         </Badge>
                       ))}
@@ -156,7 +213,7 @@ export default function GradesPage() {
                               </TableRow>
                             </TableHeader>
                             <TableBody>
-                              {(gradesData as any)[tab.id]?.map((grade: any) => (
+                              {gradesData[tab.id as keyof GradesData]?.map((grade: Grade) => (
                                 <TableRow key={grade.id}>
                                   <TableCell className="font-medium">{grade.subject}</TableCell>
                                   <TableCell>{grade.credits}</TableCell>
