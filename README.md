@@ -20,6 +20,18 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Routing Strategy
+
+This project implements a comprehensive routing strategy for an education platform with role-based access:
+
+- **Global Routes**: Login, search, profile, settings
+- **Student Routes**: Dashboard, classes, grades, attendance, fees
+- **Teacher Routes**: Dashboard, classes management, attendance, grades
+- **Admin Routes**: Full system management
+- **API Layer**: Versioned API endpoints for all roles
+
+See `ROUTING_STRATEGY.md` and `ROUTING_IMPLEMENTATION.md` for detailed documentation.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
