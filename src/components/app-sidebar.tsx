@@ -2,17 +2,10 @@
 
 import * as React from "react"
 import {
-  IconCamera,
   IconChartBar,
   IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
@@ -22,6 +15,12 @@ import {
   IconBell,
   IconBook,
   IconClipboardList,
+  IconUser,
+  IconUsersGroup,
+  IconCalendar,
+  IconFileAnalytics,
+  IconMessage,
+  IconSubtask,
 } from "@tabler/icons-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -37,129 +36,221 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+// Define navigation items for each role
+const getNavItems = (role: string) => {
+  console.log("getNavItems called with role:", role)
+  
+  switch (role) {
+    case 'teacher':
+      return [
+        {
+          title: "Dashboard",
+          url: "/teacher/dashboard",
+          icon: IconDashboard,
+        },
+        {
+          title: "Classes",
+          url: "/teacher/classes",
+          icon: IconUsersGroup,
+        },
+        {
+          title: "Attendance",
+          url: "/teacher/attendance/today",
+          icon: IconCalendar,
+        },
+        {
+          title: "Grades",
+          url: "/teacher/grades",
+          icon: IconSchool,
+          items: [
+            {
+              title: "Overview",
+              url: "/teacher/grades",
+            },
+            {
+              title: "Pending",
+              url: "/teacher/grades/pending",
+            },
+            {
+              title: "Gradebook",
+              url: "/teacher/grades/gradebook",
+            },
+            {
+              title: "Analytics",
+              url: "/teacher/grades/analytics",
+            },
+            {
+              title: "Reports",
+              url: "/teacher/grades/reports",
+            },
+          ]
+        },
+        {
+          title: "Substitutions",
+          url: "/teacher/substitutions",
+          icon: IconSubtask,
+        },
+        {
+          title: "Notices",
+          url: "/teacher/notices",
+          icon: IconBell,
+        },
+        {
+          title: "Messages",
+          url: "/teacher/messages",
+          icon: IconMessage,
+        },
+        {
+          title: "Analytics",
+          url: "/teacher/analytics",
+          icon: IconChartBar,
+        },
+        {
+          title: "Payments",
+          url: "/teacher/payments",
+          icon: IconCreditCard,
+        },
+        {
+          title: "Study Materials",
+          url: "/teacher/study-materials",
+          icon: IconBook,
+        },
+        {
+          title: "Documents",
+          url: "/teacher/documents",
+          icon: IconFileAnalytics,
+        },
+        {
+          title: "Fees",
+          url: "/teacher/fees",
+          icon: IconCreditCard,
+        },
+      ]
+    case 'admin':
+      return [
+        {
+          title: "Dashboard",
+          url: "/admin/dashboard",
+          icon: IconDashboard,
+        },
+        {
+          title: "Students",
+          url: "/admin/students",
+          icon: IconUsers,
+        },
+        {
+          title: "Teachers",
+          url: "/admin/teachers",
+          icon: IconUser,
+        },
+        {
+          title: "Classes",
+          url: "/admin/classes",
+          icon: IconUsersGroup,
+        },
+        {
+          title: "Timetables",
+          url: "/admin/timetables",
+          icon: IconCalendar,
+        },
+        {
+          title: "Exams",
+          url: "/admin/exams",
+          icon: IconFileAnalytics,
+        },
+        {
+          title: "Fees",
+          url: "/admin/fees",
+          icon: IconCreditCard,
+        },
+        {
+          title: "Notices",
+          url: "/admin/notices",
+          icon: IconBell,
+        },
+        {
+          title: "Reports",
+          url: "/admin/reports",
+          icon: IconReport,
+        },
+        {
+          title: "Audit",
+          url: "/admin/audit",
+          icon: IconFileAnalytics,
+        },
+      ]
+    case 'student':
+    default:
+      console.log("Returning student nav items")
+      return [
+        {
+          title: "Dashboard",
+          url: "/student/dashboard",
+          icon: IconDashboard,
+        },
+        {
+          title: "Grades",
+          url: "/student/grades",
+          icon: IconSchool,
+        },
+        {
+          title: "Payments",
+          url: "/student/payments",
+          icon: IconCreditCard,
+        },
+        {
+          title: "Notices",
+          url: "/student/notices",
+          icon: IconBell,
+        },
+        {
+          title: "Study Materials",
+          url: "/student/study-materials",
+          icon: IconBook,
+        },
+        {
+          title: "Assignments",
+          url: "/student/assignments",
+          icon: IconClipboardList,
+        },
+      ]
+  }
+}
+
 const data = {
   user: {
     name: "Murtaza",
     email: "160424736017@mjcollege.ac.in",
     avatar: "/avatars/shadcn.jpg",
   },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/student/dashboard",
-      icon: IconDashboard,
-    },
-    {
-      title: "Grades",
-      url: "/student/grades",
-      icon: IconSchool,
-    },
-    {
-      title: "Payments",
-      url: "/student/payments",
-      icon: IconCreditCard,
-    },
-    {
-      title: "Notices",
-      url: "/student/notices",
-      icon: IconBell,
-    },
-    {
-      title: "Study Materials",
-      url: "/student/study-materials",
-      icon: IconBook,
-    },
-    {
-      title: "Assignments",
-      url: "/student/assignments",
-      icon: IconClipboardList,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
   navSecondary: [
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: IconSettings,
     },
     {
       title: "Get Help",
-      url: "#",
+      url: "/help",
       icon: IconHelp,
     },
     {
       title: "Search",
-      url: "#",
+      url: "/search",
       icon: IconSearch,
     },
   ],
-  // documents: [
-  //   {
-  //     name: "Data Library",
-  //     url: "#",
-  //     icon: IconDatabase,
-  //   },
-  //   {
-  //     name: "Reports",
-  //     url: "#",
-  //     icon: IconReport,
-  //   },
-  //   {
-  //     name: "Word Assistant",
-  //     url: "#",
-  //     icon: IconFileWord,
-  //   },
-  // ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ 
+  role = 'student',
+  ...props 
+}: React.ComponentProps<typeof Sidebar> & { role?: string }) {
+  console.log("AppSidebar component rendered with role:", role)
+  
+  // Ensure we always get fresh nav items - no useMemo to prevent caching issues
+  const navMain = getNavItems(role)
+  
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -169,7 +260,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <a href="/">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">Verigense Edu</span>
               </a>
@@ -178,8 +269,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        {/* <NavDocuments items={data.documents} /> */}
+        <NavMain items={navMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

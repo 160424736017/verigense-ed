@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { headers } from 'next/headers';
+import { RoleProvider } from "@/components/role-provider";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { RoleDebug } from "@/components/role-debug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,11 +22,22 @@ export const metadata: Metadata = {
   description: "Verigense Education Platform - Advanced Learning Solutions",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const role = headersList.get('x-user-role') || 'student';
+  
+  // Validate role to ensure it's one of the expected values
+  let validatedRole: 'student' | 'teacher' | 'admin' = 'student';
+  if (role === 'teacher' || role === 'admin' || role === 'student') {
+    validatedRole = role as 'student' | 'teacher' | 'admin';
+  }
+  
+  console.log("RootLayout rendered with role from headers:", role, "validated role:", validatedRole);
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -34,7 +49,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ErrorBoundary>
+            <RoleProvider role={validatedRole}>
+              {children}
+              <RoleDebug role={validatedRole} />
+            </RoleProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </body>
     </html>

@@ -20,6 +20,19 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Role-Based Access Control (Development)
+
+During development, role-based access is simulated using query parameters:
+- Student pages: Add `?role=student` to URLs (default)
+- Teacher pages: Add `?role=teacher` to URLs
+- Admin pages: Add `?role=admin` to URLs
+
+Example: http://localhost:3000/teacher/dashboard?role=teacher
+
+Once you've accessed a page with a role parameter, that role will be preserved for subsequent navigation within the same browser session.
+
+In production, roles are determined by the authentication system.
+
 ## Routing Strategy
 
 This project implements a comprehensive routing strategy for an education platform with role-based access:

@@ -1,13 +1,25 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { ModeToggle } from "@/components/mode-toggle"
+import * as React from "react"
+
+function SidebarTriggerWrapper() {
+  try {
+    // This will throw if not inside a SidebarProvider
+    const { state } = useSidebar()
+    return <SidebarTrigger className="-ml-1" />
+  } catch (e) {
+    // Return null if not inside a SidebarProvider
+    return null
+  }
+}
 
 export function SiteHeader() {
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
-        <SidebarTrigger className="-ml-1" />
+        <SidebarTriggerWrapper />
         <Separator
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
