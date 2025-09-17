@@ -34,7 +34,7 @@ const recentActivities = [
 const quickActions = [
   { title: "Mark Attendance", icon: <CalendarClock className="h-4 w-4" />, href: "/teacher/attendance/today", description: "Quick attendance entry" },
   { title: "Grade Assignments", icon: <TrendingUp className="h-4 w-4" />, href: "/teacher/grades/pending", description: "Enter student grades" },
-  { title: "Upload Materials", icon: <FileText className="h-4 w-4" />, href: "/teacher/classes", description: "Share learning resources" },
+  { title: "Upload Materials", icon: <FileText className="h-4 w-4" />, href: "/teacher/study-materials", description: "Share learning resources" },
   { title: "Send Message", icon: <MessageSquare className="h-4 w-4" />, href: "/teacher/messages", description: "Communicate with students" },
 ]
 

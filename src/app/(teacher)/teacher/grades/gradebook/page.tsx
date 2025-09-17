@@ -1,9 +1,9 @@
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { 
   BookOpen, 
   Calendar, 
@@ -14,6 +14,7 @@ import {
   Search, 
   Upload 
 } from "lucide-react"
+import { GradeEntryTable } from "@/components/grade-entry-table"
 
 // Mock data for gradebook
 const assignments = [
@@ -113,67 +114,7 @@ export default function TeacherGradebookPage() {
                       </div>
                     </div>
 
-                    <div className="overflow-x-auto">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="w-64">Student</TableHead>
-                            {assignments.map((assignment) => (
-                              <TableHead key={assignment.id} className="text-center">
-                                <div className="flex flex-col">
-                                  <span>{assignment.name}</span>
-                                  <span className="text-xs font-normal text-muted-foreground">
-                                    {assignment.maxPoints} pts
-                                  </span>
-                                </div>
-                              </TableHead>
-                            ))}
-                            <TableHead className="text-center">Total</TableHead>
-                            <TableHead className="text-center">Average</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {students.map((student) => {
-                            const studentGrades = grades[student.studentId] || {};
-                            const totalPoints = assignments.reduce((sum, assignment) => {
-                              return sum + (studentGrades[assignment.id.toString()] || 0);
-                            }, 0);
-                            const maxPoints = assignments.reduce((sum, assignment) => sum + assignment.maxPoints, 0);
-                            const average = maxPoints > 0 ? Math.round((totalPoints / maxPoints) * 100) : 0;
-
-                            return (
-                              <TableRow key={student.id}>
-                                <TableCell>
-                                  <div>
-                                    <div className="font-medium">{student.name}</div>
-                                    <div className="text-sm text-muted-foreground">{student.studentId}</div>
-                                  </div>
-                                </TableCell>
-                                {assignments.map((assignment) => (
-                                  <TableCell key={assignment.id} className="text-center">
-                                    <Input
-                                      type="number"
-                                      min="0"
-                                      max={assignment.maxPoints}
-                                      defaultValue={studentGrades[assignment.id.toString()] || ''}
-                                      className="w-20 text-center"
-                                    />
-                                  </TableCell>
-                                ))}
-                                <TableCell className="text-center font-medium">
-                                  {totalPoints}/{maxPoints}
-                                </TableCell>
-                                <TableCell className="text-center">
-                                  <Badge variant={average >= 90 ? "default" : average >= 80 ? "secondary" : "destructive"}>
-                                    {average}%
-                                  </Badge>
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </div>
+                    <GradeEntryTable />
 
                     <div className="flex justify-end mt-4">
                       <Button>

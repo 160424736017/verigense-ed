@@ -18,6 +18,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 type AttendanceStatus = "present" | "absent" | "excused"
 
@@ -166,37 +167,39 @@ export function AttendanceWidget({
           
           {/* Legend Section */}
           <div className="flex-1 w-full">
-            <div className="space-y-3">
-              {(["present", "absent", "excused"] as AttendanceStatus[]).map((status, i) => {
-                const count = totals.map[status] ?? 0
-                const percent = totals.total === 0 ? 0 : Math.round((count / totals.total) * 10000) / 100
-                const color =
-                  data.find((d) => d.status === status)?.fill || `var(--chart-${i + 1})`
-                const label =
-                  data.find((d) => d.status === status)?.label ||
-                  (status.charAt(0).toUpperCase() + status.slice(1))
-                return (
-                  <div key={status} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="inline-block h-3 w-3 rounded-sm"
-                        style={{ backgroundColor: color }}
-                        aria-hidden
-                      />
-                      <span className="font-medium">{label}</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-medium">
-                        {count}
+            <ScrollArea className="h-[200px]">
+              <div className="space-y-3 pr-4">
+                {(["present", "absent", "excused"] as AttendanceStatus[]).map((status, i) => {
+                  const count = totals.map[status] ?? 0
+                  const percent = totals.total === 0 ? 0 : Math.round((count / totals.total) * 10000) / 100
+                  const color =
+                    data.find((d) => d.status === status)?.fill || `var(--chart-${i + 1})`
+                  const label =
+                    data.find((d) => d.status === status)?.label ||
+                    (status.charAt(0).toUpperCase() + status.slice(1))
+                  return (
+                    <div key={status} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="inline-block h-3 w-3 rounded-sm"
+                          style={{ backgroundColor: color }}
+                          aria-hidden
+                        />
+                        <span className="font-medium">{label}</span>
                       </div>
-                      <div className="text-muted-foreground text-xs">
-                        {percent}%
+                      <div className="text-right">
+                        <div className="font-medium">
+                          {count}
+                        </div>
+                        <div className="text-muted-foreground text-xs">
+                          {percent}%
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </CardContent>

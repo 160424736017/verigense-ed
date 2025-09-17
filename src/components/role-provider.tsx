@@ -13,21 +13,29 @@ const RoleContext = React.createContext<{ hasSidebar: boolean }>({ hasSidebar: f
 
 export function RoleProvider({ 
   children,
-  role
+  role,
+  showSidebar = true
 }: { 
   children: React.ReactNode,
-  role?: string
+  role?: string,
+  showSidebar?: boolean
 }) {
   // In a real application, you would get the role from context or props
   // For now, we'll use the role prop passed from the server
   const userRole = role || 'student'
   
-  console.log("RoleProvider rendered with role prop:", role, "using userRole:", userRole)
+  console.log("RoleProvider rendered with role prop:", role, "using userRole:", userRole, "showSidebar:", showSidebar)
   
   // Force the role to be one of the expected values
   let validatedRole: 'student' | 'teacher' | 'admin' = 'student'
   if (userRole === 'teacher' || userRole === 'admin' || userRole === 'student') {
     validatedRole = userRole as 'student' | 'teacher' | 'admin'
+  }
+  
+  // If we don't want to show the sidebar, just render children
+  if (!showSidebar) {
+    console.log("Not showing sidebar, rendering children only")
+    return <>{children}</>
   }
   
   console.log("RoleProvider using validated role:", validatedRole)

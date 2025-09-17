@@ -17,6 +17,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const announcements = [
   {
@@ -71,43 +72,45 @@ export function AnnouncementsWidget() {
         <CardDescription>Latest school announcements and updates</CardDescription>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableCaption>A list of recent announcements.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">ID</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {announcements.map((announcement) => (
-              <TableRow key={announcement.id}>
-                <TableCell className="font-medium">{announcement.id}</TableCell>
-                <TableCell>{announcement.title}</TableCell>
-                <TableCell>{announcement.date}</TableCell>
-                <TableCell className="text-right">
-                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
-                    ${announcement.status === 'New' ? 'bg-blue-100 text-blue-800' : 
-                      announcement.status === 'Upcoming' ? 'bg-yellow-100 text-yellow-800' : 
-                      announcement.status === 'Published' ? 'bg-green-100 text-green-800' : 
-                      announcement.status === 'Reminder' ? 'bg-purple-100 text-purple-800' : 
-                      'bg-gray-100 text-gray-800'}`}
-                  >
-                    {announcement.status}
-                  </span>
-                </TableCell>
+        <ScrollArea className="h-[300px]">
+          <Table>
+            <TableCaption>A list of recent announcements.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">ID</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="text-right">Status</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell colSpan={3}>Total Announcements</TableCell>
-              <TableCell className="text-right">{announcements.length}</TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {announcements.map((announcement) => (
+                <TableRow key={announcement.id}>
+                  <TableCell className="font-medium">{announcement.id}</TableCell>
+                  <TableCell>{announcement.title}</TableCell>
+                  <TableCell>{announcement.date}</TableCell>
+                  <TableCell className="text-right">
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
+                      ${announcement.status === 'New' ? 'bg-blue-100 text-blue-800' : 
+                        announcement.status === 'Upcoming' ? 'bg-yellow-100 text-yellow-800' : 
+                        announcement.status === 'Published' ? 'bg-green-100 text-green-800' : 
+                        announcement.status === 'Reminder' ? 'bg-purple-100 text-purple-800' : 
+                        'bg-gray-100 text-gray-800'}`}
+                    >
+                      {announcement.status}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={3}>Total Announcements</TableCell>
+                <TableCell className="text-right">{announcements.length}</TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </ScrollArea>
       </CardContent>
     </Card>
   )

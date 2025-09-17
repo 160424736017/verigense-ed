@@ -21,6 +21,7 @@ import {
   Users, 
   XCircle 
 } from "lucide-react"
+import { GradeEntryTable } from "@/components/grade-entry-table"
 
 // Mock data for teacher grades page
 const classData = [
@@ -221,42 +222,7 @@ export default function TeacherGradesPage() {
                       </div>
                     </div>
 
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Student Name</TableHead>
-                          <TableHead>Student ID</TableHead>
-                          <TableHead>Assignment</TableHead>
-                          <TableHead>Grade</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Action</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {studentGrades.map((student) => (
-                          <TableRow key={student.id}>
-                            <TableCell className="font-medium">{student.name}</TableCell>
-                            <TableCell>{student.studentId}</TableCell>
-                            <TableCell>{student.assignment}</TableCell>
-                            <TableCell>
-                              <Input 
-                                placeholder="Enter grade" 
-                                className="w-24" 
-                                defaultValue={student.grade}
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={student.status === "pending" ? "destructive" : "default"}>
-                                {student.status}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Button size="sm">Save</Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <GradeEntryTable />
 
                     <div className="flex justify-end mt-4">
                       <Button>

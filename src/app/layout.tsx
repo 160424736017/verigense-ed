@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { headers } from 'next/headers';
-import { RoleProvider } from "@/components/role-provider";
+import { LayoutWrapper } from "@/components/layout-wrapper";
 import { ErrorBoundary } from "@/components/error-boundary";
 import { RoleDebug } from "@/components/role-debug";
 
@@ -50,10 +50,10 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <ErrorBoundary>
-            <RoleProvider role={validatedRole}>
+            <LayoutWrapper role={validatedRole}>
               {children}
               <RoleDebug role={validatedRole} />
-            </RoleProvider>
+            </LayoutWrapper>
           </ErrorBoundary>
         </ThemeProvider>
       </body>

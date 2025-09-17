@@ -7,6 +7,7 @@ import { PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Card, CardContent } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const events = [
   {
@@ -63,19 +64,21 @@ export default function Calendar31() {
                 <span className="sr-only">Add Event</span>
               </Button>
             </div>
-            <div className="flex w-full flex-col gap-2">
-              {events.map((event) => (
-                <div
-                  key={event.title}
-                  className="bg-muted after:bg-primary/70 relative rounded-md p-2 pl-6 text-sm after:absolute after:inset-y-2 after:left-2 after:w-1 after:rounded-full"
-                >
-                  <div className="font-medium">{event.title}</div>
-                  <div className="text-muted-foreground text-xs">
-                    {formatDateRange(new Date(event.from), new Date(event.to))}
+            <ScrollArea className="h-[200px] w-full">
+              <div className="flex w-full flex-col gap-2 pr-4">
+                {events.map((event) => (
+                  <div
+                    key={event.title}
+                    className="bg-muted after:bg-primary/70 relative rounded-md p-2 pl-6 text-sm after:absolute after:inset-y-2 after:left-2 after:w-1 after:rounded-full"
+                  >
+                    <div className="font-medium">{event.title}</div>
+                    <div className="text-muted-foreground text-xs">
+                      {formatDateRange(new Date(event.from), new Date(event.to))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </CardContent>

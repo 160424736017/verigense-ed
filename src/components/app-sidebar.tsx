@@ -35,6 +35,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 // Define navigation items for each role
 const getNavItems = (role: string) => {
@@ -82,6 +83,10 @@ const getNavItems = (role: string) => {
             {
               title: "Reports",
               url: "/teacher/grades/reports",
+            },
+            {
+              title: "Test Table",
+              url: "/teacher/grades/test-table",
             },
           ]
         },
@@ -269,8 +274,10 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <ScrollArea className="h-full">
+          <NavMain items={navMain} />
+          <NavSecondary items={data.navSecondary} className="mt-auto" />
+        </ScrollArea>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

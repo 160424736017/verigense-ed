@@ -1,3 +1,5 @@
+"use client"
+
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -13,6 +15,21 @@ import {
   Search, 
   Upload 
 } from "lucide-react"
+import { GradeEntryTable } from "@/components/grade-entry-table"
+import { useState } from "react"
+import { toast } from "sonner"
+
+// Type for student grades
+type StudentGrade = {
+  id: string
+  studentName: string
+  studentId: string
+  assignment: string
+  grade: string | number
+  maxPoints: number
+  status: "pending" | "submitted" | "graded"
+  comments?: string
+}
 
 // Mock data for pending grades
 const pendingAssignments = [
@@ -21,15 +38,28 @@ const pendingAssignments = [
   { id: 3, name: "Chemistry Quiz", class: "Chemistry 301", dueDate: "2025-09-20", studentsPending: 8 },
 ]
 
-const studentGrades = [
-  { id: 1, name: "Alice Johnson", studentId: "STU001", assignment: "Mathematics Assignment 3", grade: "", status: "pending" },
-  { id: 2, name: "Bob Smith", studentId: "STU002", assignment: "Mathematics Assignment 3", grade: "", status: "pending" },
-  { id: 3, name: "Carol Davis", studentId: "STU003", assignment: "Mathematics Assignment 3", grade: "", status: "pending" },
-  { id: 4, name: "David Wilson", studentId: "STU004", assignment: "Mathematics Assignment 3", grade: "", status: "pending" },
-  { id: 5, name: "Eva Brown", studentId: "STU005", assignment: "Mathematics Assignment 3", grade: "", status: "pending" },
+// Mock data for student grades with comments
+const initialStudentGrades: StudentGrade[] = [
+  { id: "1", studentName: "Alice Johnson", studentId: "STU001", assignment: "Mathematics Assignment 3", grade: "", maxPoints: 30, status: "submitted", comments: "" },
+  { id: "2", studentName: "Bob Smith", studentId: "STU002", assignment: "Mathematics Assignment 3", grade: "", maxPoints: 30, status: "submitted", comments: "" },
+  { id: "3", studentName: "Carol Davis", studentId: "STU003", assignment: "Mathematics Assignment 3", grade: "", maxPoints: 30, status: "submitted", comments: "" },
+  { id: "4", studentName: "David Wilson", studentId: "STU004", assignment: "Mathematics Assignment 3", grade: "", maxPoints: 30, status: "submitted", comments: "" },
+  { id: "5", studentName: "Eva Brown", studentId: "STU005", assignment: "Mathematics Assignment 3", grade: "", maxPoints: 30, status: "submitted", comments: "" },
 ]
 
 export default function TeacherPendingGradesPage() {
+  const [studentGrades, setStudentGrades] = useState<StudentGrade[]>(initialStudentGrades)
+  const [searchTerm, setSearchTerm] = useState("")
+
+  const handleDataChange = (updatedData: StudentGrade[]) => {
+    setStudentGrades(updatedData)
+  }
+
+  const filteredAssignments = pendingAssignments.filter(assignment => 
+    assignment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    assignment.class.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
@@ -53,32 +83,45 @@ export default function TeacherPendingGradesPage() {
                     <CardDescription>Assignments requiring grade entry</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Assignment</TableHead>
-                          <TableHead>Class</TableHead>
-                          <TableHead>Due Date</TableHead>
-                          <TableHead>Pending</TableHead>
-                          <TableHead>Action</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {pendingAssignments.map((assignment) => (
-                          <TableRow key={assignment.id}>
-                            <TableCell className="font-medium">{assignment.name}</TableCell>
-                            <TableCell>{assignment.class}</TableCell>
-                            <TableCell>{assignment.dueDate}</TableCell>
-                            <TableCell>
-                              <Badge variant="destructive">{assignment.studentsPending}</Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Button size="sm">Grade Now</Button>
-                            </TableCell>
+                    <div className="mb-4">
+                      <div className="relative w-64">
+                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input 
+                          placeholder="Search assignments..." 
+                          className="pl-8" 
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="rounded-md border">
+                      <Table>
+                        <TableHeader className="bg-muted">
+                          <TableRow>
+                            <TableHead className="text-primary">Assignment</TableHead>
+                            <TableHead className="text-primary">Class</TableHead>
+                            <TableHead className="text-primary">Due Date</TableHead>
+                            <TableHead className="text-primary">Pending</TableHead>
+                            <TableHead className="text-primary">Action</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredAssignments.map((assignment) => (
+                            <TableRow key={assignment.id} className="hover:bg-muted/50">
+                              <TableCell className="font-medium">{assignment.name}</TableCell>
+                              <TableCell>{assignment.class}</TableCell>
+                              <TableCell>{assignment.dueDate}</TableCell>
+                              <TableCell>
+                                <Badge variant="destructive">{assignment.studentsPending}</Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Button size="sm">Grade Now</Button>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -92,68 +135,16 @@ export default function TeacherPendingGradesPage() {
                     <CardDescription>Enter grades for pending assignments</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="relative w-64">
-                        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="Search students..." className="pl-8" />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline">
-                          <FileText className="mr-2 h-4 w-4" />
-                          Download Template
-                        </Button>
-                        <Button>
-                          <Upload className="mr-2 h-4 w-4" />
-                          Import Grades
-                        </Button>
-                      </div>
-                    </div>
+                    <GradeEntryTable 
+                      data={studentGrades} 
+                      includeComments={true} 
+                      onDataChange={handleDataChange}
+                    />
 
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Student Name</TableHead>
-                          <TableHead>Student ID</TableHead>
-                          <TableHead>Submission Status</TableHead>
-                          <TableHead>Grade</TableHead>
-                          <TableHead>Comments</TableHead>
-                          <TableHead>Action</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {studentGrades.map((student) => (
-                          <TableRow key={student.id}>
-                            <TableCell className="font-medium">{student.name}</TableCell>
-                            <TableCell>{student.studentId}</TableCell>
-                            <TableCell>
-                              <Badge variant="default">Submitted</Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Input 
-                                placeholder="Enter grade" 
-                                className="w-24" 
-                                defaultValue={student.grade}
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <Input placeholder="Add comments" className="w-32" />
-                            </TableCell>
-                            <TableCell>
-                              <Button size="sm">Save</Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-
-                    <div className="flex justify-between mt-4">
+                    <div className="flex justify-between mt-6 pt-4 border-t">
                       <Button variant="outline">
                         <Download className="mr-2 h-4 w-4" />
                         Export Ungraded
-                      </Button>
-                      <Button>
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Submit All Grades
                       </Button>
                     </div>
                   </CardContent>
