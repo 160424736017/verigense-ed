@@ -37,7 +37,7 @@ export default async function RootLayout({
     validatedRole = role as 'student' | 'teacher' | 'admin';
   }
   
-  console.log("RootLayout rendered with role from headers:", role, "validated role:", validatedRole);
+  // Role validation completed
   
   return (
     <html lang="en" suppressHydrationWarning>

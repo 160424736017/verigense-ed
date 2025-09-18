@@ -85,10 +85,7 @@ export const getNavItems = (role: string) => {
               title: "Reports",
               url: "/teacher/grades/reports",
             },
-            {
-              title: "Test Table",
-              url: "/teacher/grades/test-table",
-            },
+
           ]
         },
         {

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { DatePicker } from "@/components/date-picker"
 import { 
   Calendar, 
   Clock, 
@@ -191,7 +192,10 @@ export default function TeacherSubstitutionsPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
                         <div>
                           <Label htmlFor="date">Date</Label>
-                          <Input id="date" type="date" />
+                          <DatePicker 
+                            placeholder="Select date" 
+                            onDateChange={(date) => {}} 
+                          />
                         </div>
                         <div>
                           <Label htmlFor="class">Class</Label>

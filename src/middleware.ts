@@ -29,15 +29,13 @@ export function middleware(request: NextRequest) {
     }
   }
   
-  console.log("Middleware - Pathname:", request.nextUrl.pathname)
-  console.log("Middleware - Current user role:", currentUserRole, "Role param:", roleParam, "Role cookie:", roleCookie?.value)
+  // Log middleware activity for debugging
   
   // Role-based route protection
   const { pathname } = request.nextUrl
   
   // Strict role enforcement - if accessing a role-specific area, must have that role
   if (pathname.startsWith('/admin/') && currentUserRole !== 'admin') {
-    console.log("Unauthorized access to admin area by", currentUserRole)
     // Clear the role cookie when accessing a section with the wrong role
     const response = NextResponse.redirect(new URL('/unauthorized', request.url))
     response.cookies.delete('user-role')
@@ -45,7 +43,6 @@ export function middleware(request: NextRequest) {
   }
   
   if (pathname.startsWith('/teacher/') && currentUserRole !== 'teacher') {
-    console.log("Unauthorized access to teacher area by", currentUserRole)
     // Clear the role cookie when accessing a section with the wrong role
     const response = NextResponse.redirect(new URL('/unauthorized', request.url))
     response.cookies.delete('user-role')
@@ -53,7 +50,6 @@ export function middleware(request: NextRequest) {
   }
   
   if (pathname.startsWith('/student/') && currentUserRole !== 'student') {
-    console.log("Unauthorized access to student area by", currentUserRole)
     // Clear the role cookie when accessing a section with the wrong role
     const response = NextResponse.redirect(new URL('/unauthorized', request.url))
     response.cookies.delete('user-role')
@@ -79,12 +75,9 @@ export function middleware(request: NextRequest) {
     response.headers.set('Expires', '0')
   }
   
-  console.log("Setting x-user-role header to:", currentUserRole)
-  
   // Set cookie to persist role during navigation (only in development)
   // But only set the cookie if a role parameter was explicitly provided and is valid
   if (roleParam && ['student', 'teacher', 'admin'].includes(roleParam)) {
-    console.log("Setting user-role cookie to:", roleParam)
     response.cookies.set('user-role', roleParam, {
       maxAge: 60 * 60 * 24, // 24 hours
       httpOnly: true,

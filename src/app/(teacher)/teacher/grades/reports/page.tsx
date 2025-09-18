@@ -1,7 +1,12 @@
+"use client"
+
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { DateRangePicker } from "@/components/date-range-picker"
+import { DateRange } from "react-day-picker"
+import { useState } from "react"
 import { 
   Download, 
   FileText, 
@@ -26,6 +31,11 @@ const generatedReports = [
 ]
 
 export default function TeacherGradesReportsPage() {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: new Date(new Date().setDate(new Date().getDate() - 30)),
+    to: new Date()
+  })
+  
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
@@ -131,16 +141,11 @@ export default function TeacherGradesReportsPage() {
                           </div>
                           <div>
                             <label className="text-sm font-medium">Date Range</label>
-                            <div className="grid grid-cols-2 gap-2 mt-1">
-                              <input 
-                                type="date" 
-                                className="p-2 border rounded" 
-                                placeholder="Start date"
-                              />
-                              <input 
-                                type="date" 
-                                className="p-2 border rounded" 
-                                placeholder="End date"
+                            <div className="mt-1">
+                              <DateRangePicker 
+                                dateRange={dateRange} 
+                                onDateRangeChange={setDateRange} 
+                                placeholder="Select date range" 
                               />
                             </div>
                           </div>

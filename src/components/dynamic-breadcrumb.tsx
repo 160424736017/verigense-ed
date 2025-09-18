@@ -125,7 +125,7 @@ export function DynamicBreadcrumb({ role }: { role?: string }) {
       'daily': 'Daily',
       'pending': 'Pending',
       'gradebook': 'Gradebook',
-      'test-table': 'Test Table',
+
     }
     
     if (segmentMap[segment]) {
