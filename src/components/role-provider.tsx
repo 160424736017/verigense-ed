@@ -9,7 +9,15 @@ import {
 } from "@/components/ui/sidebar"
 
 // Create a context to track if we're already inside a RoleProvider
-const RoleContext = React.createContext<{ hasSidebar: boolean }>({ hasSidebar: false })
+const RoleContext = React.createContext<{ 
+  hasSidebar: boolean,
+  role?: string
+}>({ hasSidebar: false, role: undefined })
+
+export function useRole() {
+  const context = React.useContext(RoleContext)
+  return { role: context.role }
+}
 
 export function RoleProvider({ 
   children,
@@ -52,7 +60,7 @@ export function RoleProvider({
   console.log("Rendering full RoleProvider with AppSidebar using role:", validatedRole)
   
   return (
-    <RoleContext.Provider value={{ hasSidebar: true }}>
+    <RoleContext.Provider value={{ hasSidebar: true, role: validatedRole }}>
       <SidebarProvider
         style={
           {

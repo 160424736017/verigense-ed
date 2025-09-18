@@ -39,7 +39,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 // Define navigation items for each role
-const getNavItems = (role: string) => {
+export const getNavItems = (role: string) => {
   console.log("getNavItems called with role:", role)
   
   switch (role) {
