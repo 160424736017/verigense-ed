@@ -51,7 +51,6 @@ const alerts = [
 export default function TeacherDashboardPage() {
   return (
     <ClickSpark
-      sparkColor='#fff'
       sparkSize={10}
       sparkRadius={15}
       sparkCount={8}

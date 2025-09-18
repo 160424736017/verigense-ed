@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useCallback } from 'react';
+import { useTheme } from 'next-themes';
 
 interface ClickSparkProps {
   sparkColor?: string;
@@ -21,7 +22,7 @@ interface Spark {
 }
 
 const ClickSpark: React.FC<ClickSparkProps> = ({
-  sparkColor = '#fff',
+  sparkColor,
   sparkSize = 10,
   sparkRadius = 15,
   sparkCount = 8,
@@ -30,9 +31,13 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   extraScale = 1.0,
   children
 }) => {
+  const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
   const startTimeRef = useRef<number | null>(null);
+
+  // Determine the appropriate spark color based on theme
+  const effectiveSparkColor = sparkColor || (theme === 'dark' ? '#fff' : '#000');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -114,7 +119,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         const x2 = spark.x + (distance + lineLength) * Math.cos(spark.angle);
         const y2 = spark.y + (distance + lineLength) * Math.sin(spark.angle);
 
-        ctx.strokeStyle = sparkColor;
+        ctx.strokeStyle = effectiveSparkColor;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -132,7 +137,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
+  }, [effectiveSparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     const canvas = canvasRef.current;
