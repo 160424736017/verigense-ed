@@ -7,6 +7,7 @@ import { AttendanceWidget } from "@/components/attendence-widget"
 import { AnnouncementsWidget } from "@/components/announcements-widget"
 import { Suspense } from "react"
 import { Loading } from "@/components/loading"
+import AnimatedContent from "@/components/animated-content"
 
 // import data from "./data.json"
 
@@ -17,31 +18,57 @@ export default function Page() {
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
-              <div className="flex">
-                <div className="w-full">
-                  <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
-                    <Calendar31 />
-                  </Suspense>
+            <AnimatedContent
+              distance={50}
+              direction="vertical"
+              reverse={false}
+              duration={0.8}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.2}
+              delay={0.1}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
+                <div className="flex">
+                  <div className="w-full">
+                    <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
+                      <Calendar31 />
+                    </Suspense>
+                  </div>
+                </div>
+                <div className="flex">
+                  <div className="w-full">
+                    <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
+                      <AttendanceWidget />
+                    </Suspense>
+                  </div>
                 </div>
               </div>
-              <div className="flex">
-                <div className="w-full">
-                  <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
-                    <AttendanceWidget />
-                  </Suspense>
+            </AnimatedContent>
+            <AnimatedContent
+              distance={50}
+              direction="vertical"
+              reverse={false}
+              duration={0.8}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.2}
+              delay={0.2}
+            >
+              <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
+                <div className="flex">
+                  <div className="w-full">
+                    <Suspense fallback={<div className="h-64 flex items-center justify-center"><Loading /></div>}>
+                      <AnnouncementsWidget />
+                    </Suspense>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
-              <div className="flex">
-                <div className="w-full">
-                  <Suspense fallback={<div className="h-64 flex items-center justify-center"><Loading /></div>}>
-                    <AnnouncementsWidget />
-                  </Suspense>
-                </div>
-              </div>
-            </div>
+            </AnimatedContent>
           </div>
         </div>
       </div>
