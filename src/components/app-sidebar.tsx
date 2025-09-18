@@ -121,11 +121,6 @@ const getNavItems = (role: string) => {
           url: "/teacher/documents",
           icon: IconFileAnalytics,
         },
-        {
-          title: "Fees",
-          url: "/teacher/fees",
-          icon: IconCreditCard,
-        },
       ]
     case 'admin':
       return [
