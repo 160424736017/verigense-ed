@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { Suspense } from "react"
 import { Loading } from "@/components/loading"
+import AnimatedContent from "@/components/animated-content"
 
 // Mock data for teacher-specific information
 const classData = [
@@ -51,142 +52,207 @@ export default function TeacherDashboardPage() {
       <div className="flex flex-1 flex-col">
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-            {/* Welcome Section */ }
-            <div className="px-4 lg:px-6">
-              <h1 className="text-2xl font-bold">Good Morning, Mr. Johnson</h1>
-              <p className="text-muted-foreground">Here&apos;s what&apos;s happening with your classes today.</p>
-            </div>
+            {/* Welcome Section */}
+            <AnimatedContent
+              distance={40}
+              direction="vertical"
+              reverse={false}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.15}
+              delay={0.05}
+            >
+              <div className="px-4 lg:px-6">
+                <h1 className="text-2xl font-bold">Good Morning, Mr. Johnson</h1>
+                <p className="text-muted-foreground">Here&apos;s what&apos;s happening with your classes today.</p>
+              </div>
+            </AnimatedContent>
             
-            {/* Quick Actions */ }
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
-              {quickActions.map((action, index) => (
-                <Card key={index} className="hover:bg-accent transition-colors">
-                  <CardContent className="p-4">
-                    <Button variant="ghost" className="w-full h-auto flex flex-col items-center justify-center gap-2 p-4" asChild>
-                      <a href={action.href}>
-                        {action.icon}
-                        <span className="text-sm font-medium">{action.title}</span>
-                        <span className="text-xs text-muted-foreground text-center">{action.description}</span>
-                      </a>
-                    </Button>
+            {/* Quick Actions */}
+            <AnimatedContent
+              distance={40}
+              direction="vertical"
+              reverse={false}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.15}
+              delay={0.1}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
+                {quickActions.map((action, index) => (
+                  <Card key={index} className="hover:bg-accent transition-colors">
+                    <CardContent className="p-4">
+                      <Button variant="ghost" className="w-full h-auto flex flex-col items-center justify-center gap-2 p-4" asChild>
+                        <a href={action.href}>
+                          {action.icon}
+                          <span className="text-sm font-medium">{action.title}</span>
+                          <span className="text-xs text-muted-foreground text-center">{action.description}</span>
+                        </a>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </AnimatedContent>
+            
+            {/* Alerts Section */}
+            <AnimatedContent
+              distance={40}
+              direction="vertical"
+              reverse={false}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.15}
+              delay={0.15}
+            >
+              <div className="px-4 lg:px-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <AlertCircle className="h-5 w-5 text-yellow-500" />
+                      Alerts & Notifications
+                    </CardTitle>
+                    <CardDescription>Important updates requiring your attention</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {alerts.map((alert) => (
+                        <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg border">
+                          {alert.type === "warning" && <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5" />}
+                          {alert.type === "success" && <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />}
+                          {alert.type === "info" && <Bell className="h-5 w-5 text-blue-500 mt-0.5" />}
+                          <div className="flex-1">
+                            <p className="text-sm font-medium">{alert.message}</p>
+                            <p className="text-xs text-muted-foreground">{alert.time}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
+              </div>
+            </AnimatedContent>
             
-            {/* Alerts Section */ }
-            <div className="px-4 lg:px-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertCircle className="h-5 w-5 text-yellow-500" />
-                    Alerts & Notifications
-                  </CardTitle>
-                  <CardDescription>Important updates requiring your attention</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {alerts.map((alert) => (
-                      <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg border">
-                        {alert.type === "warning" && <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5" />}
-                        {alert.type === "success" && <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />}
-                        {alert.type === "info" && <Bell className="h-5 w-5 text-blue-500 mt-0.5" />}
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">{alert.message}</p>
-                          <p className="text-xs text-muted-foreground">{alert.time}</p>
+            {/* Classes and Calendar */}
+            <AnimatedContent
+              distance={40}
+              direction="vertical"
+              reverse={false}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.15}
+              delay={0.2}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
+                {/* Today&apos;s Classes */}
+                <div className="flex">
+                  <div className="w-full">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Clock className="h-5 w-5" />
+                          Today&apos;s Classes
+                        </CardTitle>
+                        <CardDescription>Your schedule for today</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {classData.map((classItem) => (
+                            <div key={classItem.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent">
+                              <div>
+                                <h3 className="font-medium">{classItem.name}</h3>
+                                <p className="text-sm text-muted-foreground">{classItem.time} • {classItem.room}</p>
+                              </div>
+                              <Badge variant="secondary">{classItem.students} students</Badge>
+                            </div>
+                          ))}
                         </div>
-                      </div>
-                    ))}
+                      </CardContent>
+                    </Card>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </div>
+                
+                {/* Calendar */}
+                <div className="flex">
+                  <div className="w-full">
+                    <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
+                      <Calendar31 />
+                    </Suspense>
+                  </div>
+                </div>
+              </div>
+            </AnimatedContent>
             
-            {/* Classes and Calendar */ }
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
-              {/* Today&apos;s Classes */ }
-              <div className="flex">
-                <div className="w-full">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Clock className="h-5 w-5" />
-                        Today&apos;s Classes
-                      </CardTitle>
-                      <CardDescription>Your schedule for today</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {classData.map((classItem) => (
-                          <div key={classItem.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent">
-                            <div>
-                              <h3 className="font-medium">{classItem.name}</h3>
-                              <p className="text-sm text-muted-foreground">{classItem.time} • {classItem.room}</p>
+            {/* Recent Activities and Announcements */}
+            <AnimatedContent
+              distance={40}
+              direction="vertical"
+              reverse={false}
+              duration={0.6}
+              ease="power3.out"
+              initialOpacity={0}
+              animateOpacity
+              scale={1}
+              threshold={0.15}
+              delay={0.25}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
+                {/* Recent Activities */}
+                <div className="flex">
+                  <div className="w-full">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Bell className="h-5 w-5" />
+                          Recent Activities
+                        </CardTitle>
+                        <CardDescription>Your latest actions</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-4">
+                          {recentActivities.map((activity) => (
+                            <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg border">
+                              <div className="mt-1 rounded-full bg-primary/10 p-2">
+                                {activity.type === "success" && <CheckCircle className="h-4 w-4 text-green-500" />}
+                                {activity.type === "info" && <Bell className="h-4 w-4 text-blue-500" />}
+                                {activity.type === "message" && <MessageSquare className="h-4 w-4 text-purple-500" />}
+                                {activity.type === "upload" && <FileText className="h-4 w-4 text-orange-500" />}
+                              </div>
+                              <div>
+                                <p className="font-medium">{activity.action}</p>
+                                <p className="text-sm text-muted-foreground">{activity.subject}</p>
+                                <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                              </div>
                             </div>
-                            <Badge variant="secondary">{classItem.students} students</Badge>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+                
+                {/* Announcements */}
+                <div className="flex">
+                  <div className="w-full">
+                    <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
+                      <AnnouncementsWidget />
+                    </Suspense>
+                  </div>
                 </div>
               </div>
-              
-              {/* Calendar */ }
-              <div className="flex">
-                <div className="w-full">
-                  <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
-                    <Calendar31 />
-                  </Suspense>
-                </div>
-              </div>
-            </div>
-            
-            {/* Recent Activities and Announcements */ }
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
-              {/* Recent Activities */ }
-              <div className="flex">
-                <div className="w-full">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <Bell className="h-5 w-5" />
-                        Recent Activities
-                      </CardTitle>
-                      <CardDescription>Your latest actions</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {recentActivities.map((activity) => (
-                          <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg border">
-                            <div className="mt-1 rounded-full bg-primary/10 p-2">
-                              {activity.type === "success" && <CheckCircle className="h-4 w-4 text-green-500" />}
-                              {activity.type === "info" && <Bell className="h-4 w-4 text-blue-500" />}
-                              {activity.type === "message" && <MessageSquare className="h-4 w-4 text-purple-500" />}
-                              {activity.type === "upload" && <FileText className="h-4 w-4 text-orange-500" />}
-                            </div>
-                            <div>
-                              <p className="font-medium">{activity.action}</p>
-                              <p className="text-sm text-muted-foreground">{activity.subject}</p>
-                              <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-              
-              {/* Announcements */ }
-              <div className="flex">
-                <div className="w-full">
-                  <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
-                    <AnnouncementsWidget />
-                  </Suspense>
-                </div>
-              </div>
-            </div>
+            </AnimatedContent>
           </div>
         </div>
       </div>
