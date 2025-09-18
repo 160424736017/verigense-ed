@@ -112,11 +112,6 @@ const getNavItems = (role: string) => {
           icon: IconChartBar,
         },
         {
-          title: "Payments",
-          url: "/teacher/payments",
-          icon: IconCreditCard,
-        },
-        {
           title: "Study Materials",
           url: "/teacher/study-materials",
           icon: IconBook,
