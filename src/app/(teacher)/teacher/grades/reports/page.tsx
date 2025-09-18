@@ -15,6 +15,13 @@ import {
   Calendar,
   Filter
 } from "lucide-react"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 // Mock data for reports
 const reportTemplates = [
@@ -132,12 +139,16 @@ export default function TeacherGradesReportsPage() {
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium">Class</label>
-                            <select className="w-full p-2 border rounded mt-1">
-                              <option>Select a class</option>
-                              <option>Mathematics 101</option>
-                              <option>Physics 201</option>
-                              <option>Chemistry 301</option>
-                            </select>
+                            <Select>
+                              <SelectTrigger className="w-full mt-1">
+                                <SelectValue placeholder="Select a class" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="mathematics">Mathematics 101</SelectItem>
+                                <SelectItem value="physics">Physics 201</SelectItem>
+                                <SelectItem value="chemistry">Chemistry 301</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                           <div>
                             <label className="text-sm font-medium">Date Range</label>
@@ -151,12 +162,17 @@ export default function TeacherGradesReportsPage() {
                           </div>
                           <div>
                             <label className="text-sm font-medium">Report Type</label>
-                            <select className="w-full p-2 border rounded mt-1">
-                              <option>Grade Summary</option>
-                              <option>Detailed Grades</option>
-                              <option>Performance Analysis</option>
-                              <option>Grade Distribution</option>
-                            </select>
+                            <Select>
+                              <SelectTrigger className="w-full mt-1">
+                                <SelectValue placeholder="Grade Summary" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="summary">Grade Summary</SelectItem>
+                                <SelectItem value="detailed">Detailed Grades</SelectItem>
+                                <SelectItem value="analysis">Performance Analysis</SelectItem>
+                                <SelectItem value="distribution">Grade Distribution</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                           <div>
                             <label className="text-sm font-medium">Include</label>
