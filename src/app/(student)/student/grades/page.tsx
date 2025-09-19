@@ -1,3 +1,5 @@
+"use client"
+
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -7,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Download, Share2, FileText, AlertTriangle, TrendingUp, BarChart3, CheckCircle, XCircle, Clock } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import AnimatedContent from "@/components/animated-content"
+import * as React from "react"
 
 // Define types for our data
 interface SemesterData {
@@ -111,7 +114,7 @@ const creditsData = {
   completed: 92,
   remaining: 28,
   coreSubjects: 60,
-  electives: 20,
+  electives: 12,
   labs: 12
 }
 
@@ -125,6 +128,65 @@ export default function GradesPage() {
   // Calculate active backlogs count
   const activeBacklogsCount = backlogsData.length;
   
+  // State for animated progress values
+  const [graduationProgress, setGraduationProgress] = React.useState(0)
+  const [coreSubjectsProgress, setCoreSubjectsProgress] = React.useState(0)
+  const [electivesProgress, setElectivesProgress] = React.useState(0)
+  const [labsProgress, setLabsProgress] = React.useState(0)
+  
+  // Refs for progress elements
+  const graduationRef = React.useRef<HTMLDivElement>(null)
+  const creditsRef = React.useRef<HTMLDivElement>(null)
+
+  // Animate progress values when elements become visible
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (entry.target === graduationRef.current && graduationProgress === 0) {
+              const timer = setTimeout(() => {
+                setGraduationProgress(semesterData.graduationPercentage);
+              }, 300)
+              return () => clearTimeout(timer)
+            }
+            
+            if (entry.target === creditsRef.current && coreSubjectsProgress === 0) {
+              const timer1 = setTimeout(() => {
+                setCoreSubjectsProgress((creditsData.coreSubjects / 70) * 100);
+              }, 300)
+              const timer2 = setTimeout(() => {
+                setElectivesProgress((creditsData.electives / 15) * 100);
+              }, 500)
+              const timer3 = setTimeout(() => {
+                setLabsProgress((creditsData.labs / 15) * 100);
+              }, 700)
+              
+              return () => {
+                clearTimeout(timer1)
+                clearTimeout(timer2)
+                clearTimeout(timer3)
+              }
+            }
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (graduationRef.current) {
+      observer.observe(graduationRef.current);
+    }
+    
+    if (creditsRef.current) {
+      observer.observe(creditsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [graduationProgress, coreSubjectsProgress]);
+
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
@@ -195,7 +257,9 @@ export default function GradesPage() {
                           <CardTitle className="text-3xl">{semesterData.graduationPercentage}%</CardTitle>
                         </CardHeader>
                         <CardContent className="pt-0">
-                          <Progress value={semesterData.graduationPercentage} className="h-2" />
+                          <div ref={graduationRef}>
+                            <Progress value={graduationProgress ?? 0} className="h-2" />
+                          </div>
                         </CardContent>
                       </Card>
                       
@@ -353,7 +417,7 @@ export default function GradesPage() {
                       <CardDescription>Visual representation of your credit progress</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div ref={creditsRef} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                           {/* Chart visualization area - to be implemented later */}
                           <div className="h-[200px] flex items-center justify-center bg-muted/50 rounded-lg">
@@ -366,22 +430,26 @@ export default function GradesPage() {
                               <span>Core Subjects</span>
                               <span>{creditsData.coreSubjects}/70</span>
                             </div>
-                            <Progress value={(creditsData.coreSubjects / 70) * 100} className="h-2" />
+                            <Progress value={coreSubjectsProgress ?? 0} className="h-2" />
                           </div>
                           <div>
                             <div className="flex justify-between mb-1">
                               <span>Electives</span>
                               <span>{creditsData.electives}/15</span>
                             </div>
-                            <Progress value={(creditsData.electives / 15) * 100} className="h-2" />
-                            <p className="text-sm text-yellow-600 mt-1">Elective credits short by {15 - creditsData.electives}</p>
+                            <Progress value={Math.min(electivesProgress ?? 0, 100)} className="h-2" />
+                            <p className="text-sm text-yellow-600 mt-1">
+                              {creditsData.electives >= 15 
+                                ? "All elective credits earned" 
+                                : `Elective credits short by ${15 - creditsData.electives}`}
+                            </p>
                           </div>
                           <div>
                             <div className="flex justify-between mb-1">
                               <span>Labs/Projects</span>
                               <span>{creditsData.labs}/15</span>
                             </div>
-                            <Progress value={(creditsData.labs / 15) * 100} className="h-2" />
+                            <Progress value={Math.min(labsProgress ?? 0, 100)} className="h-2" />
                           </div>
                         </div>
                       </div>
