@@ -34,6 +34,20 @@ const classData = [
   { id: 3, name: "Chemistry 301", time: "2:00 PM - 3:30 PM", students: 22, room: "Lab 202" },
 ]
 
+const recentActivities = [
+  { id: 1, action: "Grades submitted", subject: "Mathematics Assignment 3", time: "2 hours ago", type: "success" },
+  { id: 2, action: "Attendance marked", subject: "Physics class", time: "1 day ago", type: "info" },
+  { id: 3, action: "New message", subject: "Parent meeting request", time: "1 day ago", type: "message" },
+  { id: 4, action: "Materials uploaded", subject: "Chemistry lab notes", time: "2 days ago", type: "upload" },
+]
+
+const quickActions = [
+  { title: "Mark Attendance", icon: <CalendarClock className="h-4 w-4" />, href: "/teacher/attendance/today", description: "Quick attendance entry" },
+  { title: "Grade Assignments", icon: <TrendingUp className="h-4 w-4" />, href: "/teacher/grades/pending", description: "Enter student grades" },
+  { title: "Upload Materials", icon: <FileText className="h-4 w-4" />, href: "/teacher/study-materials", description: "Share learning resources" },
+  { title: "Send Message", icon: <MessageSquare className="h-4 w-4" />, href: "/teacher/messages", description: "Communicate with students" },
+]
+
 export default function TeacherDashboardPage() {
   const [activeCollapsible, setActiveCollapsible] = useState<string | null>(null)
 
@@ -106,6 +120,40 @@ export default function TeacherDashboardPage() {
                 </div>
               </AnimatedContent>
               
+              {/* Quick Actions */}
+              <AnimatedContent
+                distance={40}
+                direction="vertical"
+                reverse={false}
+                duration={0.6}
+                ease="power3.out"
+                initialOpacity={0}
+                animateOpacity
+                scale={1}
+                threshold={0.15}
+                delay={0.15}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
+                  {quickActions.map((action, index) => (
+                    <div 
+                      key={index} 
+                      className="flex items-center justify-between rounded-lg border p-3 hover:bg-accent cursor-pointer transition-colors"
+                      onClick={() => window.location.href = action.href}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-full bg-primary/10 p-2">
+                          {action.icon}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-left">{action.title}</h3>
+                          <p className="text-sm text-muted-foreground text-left">{action.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </AnimatedContent>
+              
               {/* Classes and Calendar */}
               <AnimatedContent
                 distance={40}
@@ -126,6 +174,56 @@ export default function TeacherDashboardPage() {
                       <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
                         <Calendar31 />
                       </Suspense>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedContent>
+
+              {/* Recent Activities */}
+              <AnimatedContent
+                distance={40}
+                direction="vertical"
+                reverse={false}
+                duration={0.6}
+                ease="power3.out"
+                initialOpacity={0}
+                animateOpacity
+                scale={1}
+                threshold={0.15}
+                delay={0.25}
+              >
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
+                  {/* Recent Activities */}
+                  <div className="flex">
+                    <div className="w-full">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <Bell className="h-5 w-5" />
+                            Recent Activities
+                          </CardTitle>
+                          <CardDescription>Your latest actions</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-4">
+                            {recentActivities.map((activity) => (
+                              <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg border">
+                                <div className="mt-1 rounded-full bg-primary/10 p-2">
+                                  {activity.type === "success" && <CheckCircle className="h-4 w-4 text-green-500" />}
+                                  {activity.type === "info" && <Bell className="h-4 w-4 text-blue-500" />}
+                                  {activity.type === "message" && <MessageSquare className="h-4 w-4 text-purple-500" />}
+                                  {activity.type === "upload" && <FileText className="h-4 w-4 text-orange-500" />}
+                                </div>
+                                <div>
+                                  <p className="font-medium">{activity.action}</p>
+                                  <p className="text-sm text-muted-foreground">{activity.subject}</p>
+                                  <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
                   </div>
                 </div>
