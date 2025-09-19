@@ -16,10 +16,16 @@ import {
   CheckCircle,
   Clock
 } from "lucide-react"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { Loading } from "@/components/loading"
 import AnimatedContent from "@/components/animated-content"
 import ClickSpark from "@/components/ClickSpark"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 // Mock data for teacher-specific information
 const classData = [
@@ -49,6 +55,12 @@ const alerts = [
 ]
 
 export default function TeacherDashboardPage() {
+  const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
+
+  const handleAccordionChange = (value: string | undefined) => {
+    setOpenAccordion(value);
+  };
+
   return (
     <ClickSpark
       sparkSize={10}
@@ -80,7 +92,7 @@ export default function TeacherDashboardPage() {
                 </div>
               </AnimatedContent>
               
-              {/* Quick Actions */}
+              {/* Announcements and Alerts Section */}
               <AnimatedContent
                 distance={40}
                 direction="vertical"
@@ -92,6 +104,92 @@ export default function TeacherDashboardPage() {
                 scale={1}
                 threshold={0.15}
                 delay={0.1}
+              >
+                <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
+                  {/* Announcements */}
+                  <div className="flex">
+                    <div className="w-full">
+                      <Card className="shadow-sm">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={handleAccordionChange}>
+                          <AccordionItem value="announcements" className="border-0">
+                            <AccordionTrigger className="hover:no-underline px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <Bell className="h-4 w-4 text-primary" />
+                                <span className="font-medium">Announcements</span>
+                                <Badge variant="secondary" className="ml-2 text-xs px-1.5 py-0.5">7 new</Badge>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 pb-3">
+                              <div className="pt-0 border-t mt-1">
+                                <Suspense fallback={<div className="py-4"><Loading /></div>}>
+                                  <div className="max-h-60 overflow-y-auto">
+                                    <AnnouncementsWidget />
+                                  </div>
+                                </Suspense>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </Card>
+                    </div>
+                  </div>
+                  
+                  {/* Alerts & Notifications */}
+                  <div className="flex">
+                    <div className="w-full">
+                      <Card className="shadow-sm">
+                        <Accordion type="single" collapsible className="w-full" value={openAccordion} onValueChange={handleAccordionChange}>
+                          <AccordionItem value="alerts" className="border-0">
+                            <AccordionTrigger className="hover:no-underline px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <AlertCircle className="h-4 w-4 text-primary" />
+                                <span className="font-medium">Alerts & Notifications</span>
+                                <Badge variant="secondary" className="ml-2 text-xs px-1.5 py-0.5">3 new</Badge>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-4 pb-4">
+                              <div className="pt-0 border-t mt-1">
+                                <div className="max-h-60 overflow-y-auto">
+                                  <Card className="border-0 shadow-none">
+                                    <CardContent className="p-0">
+                                      <div className="space-y-3 py-3">
+                                        {alerts.map((alert) => (
+                                          <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg border">
+                                            {alert.type === "warning" && <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5" />}
+                                            {alert.type === "success" && <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />}
+                                            {alert.type === "info" && <Bell className="h-5 w-5 text-blue-500 mt-0.5" />}
+                                            <div className="flex-1">
+                                              <p className="text-sm font-medium">{alert.message}</p>
+                                              <p className="text-xs text-muted-foreground">{alert.time}</p>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                </div>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </AnimatedContent>
+              
+              {/* Quick Actions */}
+              <AnimatedContent
+                distance={40}
+                direction="vertical"
+                reverse={false}
+                duration={0.6}
+                ease="power3.out"
+                initialOpacity={0}
+                animateOpacity
+                scale={1}
+                threshold={0.15}
+                delay={0.15}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
                   {quickActions.map((action, index) => (
@@ -107,47 +205,6 @@ export default function TeacherDashboardPage() {
                       </CardContent>
                     </Card>
                   ))}
-                </div>
-              </AnimatedContent>
-              
-              {/* Alerts Section */}
-              <AnimatedContent
-                distance={40}
-                direction="vertical"
-                reverse={false}
-                duration={0.6}
-                ease="power3.out"
-                initialOpacity={0}
-                animateOpacity
-                scale={1}
-                threshold={0.15}
-                delay={0.15}
-              >
-                <div className="px-4 lg:px-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <AlertCircle className="h-5 w-5 text-yellow-500" />
-                        Alerts & Notifications
-                      </CardTitle>
-                      <CardDescription>Important updates requiring your attention</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {alerts.map((alert) => (
-                          <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg border">
-                            {alert.type === "warning" && <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5" />}
-                            {alert.type === "success" && <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />}
-                            {alert.type === "info" && <Bell className="h-5 w-5 text-blue-500 mt-0.5" />}
-                            <div className="flex-1">
-                              <p className="text-sm font-medium">{alert.message}</p>
-                              <p className="text-xs text-muted-foreground">{alert.time}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
                 </div>
               </AnimatedContent>
               
@@ -204,7 +261,7 @@ export default function TeacherDashboardPage() {
                 </div>
               </AnimatedContent>
               
-              {/* Recent Activities and Announcements */}
+              {/* Recent Activities */}
               <AnimatedContent
                 distance={40}
                 direction="vertical"
@@ -249,15 +306,6 @@ export default function TeacherDashboardPage() {
                           </div>
                         </CardContent>
                       </Card>
-                    </div>
-                  </div>
-                  
-                  {/* Announcements */}
-                  <div className="flex">
-                    <div className="w-full">
-                      <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
-                        <AnnouncementsWidget />
-                      </Suspense>
                     </div>
                   </div>
                 </div>
