@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Bell, AlertCircle, CheckCircle, Info } from "lucide-react"
 import { ChevronDown, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const alerts = [
   {
@@ -63,15 +63,49 @@ const alerts = [
   },
 ]
 
-export function AlertsNotificationsWidget() {
+export function AlertsNotificationsWidget({ 
+  activeCollapsible, 
+  setActiveCollapsible,
+  id
+}: { 
+  activeCollapsible?: string | null, 
+  setActiveCollapsible?: (id: string | null) => void,
+  id?: string
+} = {}) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [openAlerts, setOpenAlerts] = useState<Record<string, boolean>>({})
+  const [openAlert, setOpenAlert] = useState<string | null>(null)
 
-  const toggleAlert = (id: string) => {
-    setOpenAlerts(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }))
+  const toggleAlert = (alertId: string) => {
+    // Only allow toggling if the main collapsible is expanded
+    if (isExpanded) {
+      setOpenAlert(prev => prev === alertId ? null : alertId)
+    }
+  }
+
+  // Handle external changes (when the other widget is expanded)
+  useEffect(() => {
+    if (activeCollapsible && id && activeCollapsible !== id) {
+      setIsExpanded(false)
+      // Also collapse all inner items when main is collapsed
+      setOpenAlert(null)
+    }
+  }, [activeCollapsible, id])
+
+  // Handle local changes
+  const handleExpandChange = (expanded: boolean) => {
+    setIsExpanded(expanded)
+    // When collapsing the main, also collapse all inner items
+    if (!expanded) {
+      setOpenAlert(null)
+    }
+    // Only interact with the shared state if the callback is provided
+    if (setActiveCollapsible && id) {
+      if (expanded) {
+        setActiveCollapsible(id)
+      } else if (activeCollapsible === id) {
+        setActiveCollapsible(null)
+      }
+    }
   }
 
   const getIcon = (type: string) => {
@@ -93,7 +127,7 @@ export function AlertsNotificationsWidget() {
   }
 
   return (
-    <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+    <Collapsible open={isExpanded} onOpenChange={handleExpandChange}>
       <CollapsibleTrigger asChild>
         <div className="flex items-center justify-between rounded-lg border p-3 hover:bg-accent cursor-pointer">
           <div className="flex items-center gap-3">
@@ -120,7 +154,7 @@ export function AlertsNotificationsWidget() {
         {alerts.map((alert) => (
           <Collapsible 
             key={alert.id} 
-            open={openAlerts[alert.id] || false}
+            open={isExpanded && openAlert === alert.id}
             onOpenChange={() => toggleAlert(alert.id)}
           >
             <CollapsibleTrigger asChild>
@@ -131,7 +165,7 @@ export function AlertsNotificationsWidget() {
                     size="sm"
                     className="h-6 w-6 p-0"
                   >
-                    {openAlerts[alert.id] ? (
+                    {openAlert === alert.id ? (
                       <ChevronDown className="h-4 w-4" />
                     ) : (
                       <ChevronRight className="h-4 w-4" />

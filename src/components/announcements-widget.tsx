@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Bell } from "lucide-react"
 import { ChevronDown, ChevronRight } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 const announcements = [
   {
@@ -63,19 +63,53 @@ const announcements = [
   },
 ]
 
-export function AnnouncementsWidget() {
+export function AnnouncementsWidget({ 
+  activeCollapsible, 
+  setActiveCollapsible,
+  id
+}: { 
+  activeCollapsible?: string | null, 
+  setActiveCollapsible?: (id: string | null) => void,
+  id?: string
+} = {}) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [openAnnouncements, setOpenAnnouncements] = useState<Record<string, boolean>>({})
+  const [openAnnouncement, setOpenAnnouncement] = useState<string | null>(null)
 
-  const toggleAnnouncement = (id: string) => {
-    setOpenAnnouncements(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }))
+  const toggleAnnouncement = (announcementId: string) => {
+    // Only allow toggling if the main collapsible is expanded
+    if (isExpanded) {
+      setOpenAnnouncement(prev => prev === announcementId ? null : announcementId)
+    }
+  }
+
+  // Handle external changes (when the other widget is expanded)
+  useEffect(() => {
+    if (activeCollapsible && id && activeCollapsible !== id) {
+      setIsExpanded(false)
+      // Also collapse all inner items when main is collapsed
+      setOpenAnnouncement(null)
+    }
+  }, [activeCollapsible, id])
+
+  // Handle local changes
+  const handleExpandChange = (expanded: boolean) => {
+    setIsExpanded(expanded)
+    // When collapsing the main, also collapse all inner items
+    if (!expanded) {
+      setOpenAnnouncement(null)
+    }
+    // Only interact with the shared state if the callback is provided
+    if (setActiveCollapsible && id) {
+      if (expanded) {
+        setActiveCollapsible(id)
+      } else if (activeCollapsible === id) {
+        setActiveCollapsible(null)
+      }
+    }
   }
 
   return (
-    <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
+    <Collapsible open={isExpanded} onOpenChange={handleExpandChange}>
       <CollapsibleTrigger asChild>
         <div className="flex items-center justify-between rounded-lg border p-3 hover:bg-accent cursor-pointer">
           <div className="flex items-center gap-3">
@@ -102,7 +136,7 @@ export function AnnouncementsWidget() {
         {announcements.map((announcement) => (
           <Collapsible 
             key={announcement.id} 
-            open={openAnnouncements[announcement.id] || false}
+            open={isExpanded && openAnnouncement === announcement.id}
             onOpenChange={() => toggleAnnouncement(announcement.id)}
           >
             <CollapsibleTrigger asChild>
@@ -113,7 +147,7 @@ export function AnnouncementsWidget() {
                     size="sm"
                     className="h-6 w-6 p-0"
                   >
-                    {openAnnouncements[announcement.id] ? (
+                    {openAnnouncement === announcement.id ? (
                       <ChevronDown className="h-4 w-4" />
                     ) : (
                       <ChevronRight className="h-4 w-4" />
