@@ -64,7 +64,7 @@ const announcements = [
 ]
 
 export function AnnouncementsWidget() {
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [openAnnouncements, setOpenAnnouncements] = useState<Record<string, boolean>>({})
 
   const toggleAnnouncement = (id: string) => {

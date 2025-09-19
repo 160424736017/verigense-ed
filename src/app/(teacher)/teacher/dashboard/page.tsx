@@ -3,6 +3,7 @@
 import { SiteHeader } from "@/components/site-header"
 import Calendar31 from "@/components/calendar-31"
 import { AnnouncementsWidget } from "@/components/announcements-widget"
+import { AlertsNotificationsWidget } from "@/components/alerts-notifications-widget"
 import {
   Card,
   CardContent,
@@ -18,7 +19,6 @@ import {
   MessageSquare,
   TrendingUp,
   Bell,
-  AlertCircle,
   CheckCircle,
   Clock
 } from "lucide-react"
@@ -26,12 +26,6 @@ import { Suspense, useState } from "react"
 import { Loading } from "@/components/loading"
 import AnimatedContent from "@/components/animated-content"
 import ClickSpark from "@/components/ClickSpark"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 
 // Mock data for teacher-specific information
 const classData = [
@@ -54,18 +48,7 @@ const quickActions = [
   { title: "Send Message", icon: <MessageSquare className="h-4 w-4" />, href: "/teacher/messages", description: "Communicate with students" },
 ]
 
-const alerts = [
-  { id: 1, message: "Timetable change: Physics class moved to Lab 301", type: "info", time: "30 mins ago" },
-  { id: 2, message: "Pending grades for Chemistry Assignment 2", type: "warning", time: "1 day ago" },
-  { id: 3, message: "Substitution request approved for tomorrow", type: "success", time: "2 days ago" },
-]
-
 export default function TeacherDashboardPage() {
-  const [openAccordion, setOpenAccordion] = useState<string | undefined>(undefined);
-
-  const handleAccordionChange = (value: string | undefined) => {
-    setOpenAccordion(value);
-  };
 
   return (
     <ClickSpark
@@ -122,38 +105,7 @@ export default function TeacherDashboardPage() {
                   {/* Alerts & Notifications */}
                   <div className="flex">
                     <div className="w-full">
-                      <Card className="shadow-sm">
-                        <CardHeader className="px-4 py-3">
-                          <div className="flex items-center gap-2">
-                            <AlertCircle className="h-4 w-4 text-primary" />
-                            <CardTitle className="text-base">Alerts & Notifications</CardTitle>
-                            <Badge variant="secondary" className="ml-2 text-xs px-1.5 py-0.5">3 new</Badge>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="px-4 pb-3">
-                          <div className="pt-0 border-t mt-1">
-                            <div className="max-h-60 overflow-y-auto">
-                              <Card className="border-0 shadow-none">
-                                <CardContent className="p-0">
-                                  <div className="space-y-3 py-3">
-                                    {alerts.map((alert) => (
-                                      <div key={alert.id} className="flex items-start gap-3 p-3 rounded-lg border">
-                                        {alert.type === "warning" && <AlertCircle className="h-5 w-5 text-yellow-500 mt-0.5" />}
-                                        {alert.type === "success" && <CheckCircle className="h-5 w-5 text-green-500 mt-0.5" />}
-                                        {alert.type === "info" && <Bell className="h-5 w-5 text-blue-500 mt-0.5" />}
-                                        <div className="flex-1">
-                                          <p className="text-sm font-medium">{alert.message}</p>
-                                          <p className="text-xs text-muted-foreground">{alert.time}</p>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <AlertsNotificationsWidget />
                     </div>
                   </div>
                 </div>
