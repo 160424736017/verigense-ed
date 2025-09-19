@@ -126,17 +126,21 @@ export default function TeacherDashboardPage() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4 lg:px-6">
                   {quickActions.map((action, index) => (
-                    <Card key={index} className="hover:bg-accent transition-colors">
-                      <CardContent className="p-4">
-                        <Button variant="ghost" className="w-full h-auto flex flex-col items-center justify-center gap-2 p-4" asChild>
-                          <a href={action.href}>
-                            {action.icon}
-                            <span className="text-sm font-medium">{action.title}</span>
-                            <span className="text-xs text-muted-foreground text-center">{action.description}</span>
-                          </a>
-                        </Button>
-                      </CardContent>
-                    </Card>
+                    <div 
+                      key={index} 
+                      className="flex items-center justify-between rounded-lg border p-3 hover:bg-accent cursor-pointer transition-colors"
+                      onClick={() => window.location.href = action.href}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-full bg-primary/10 p-2">
+                          {action.icon}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-left">{action.title}</h3>
+                          <p className="text-sm text-muted-foreground text-left">{action.description}</p>
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </AnimatedContent>
