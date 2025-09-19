@@ -158,36 +158,8 @@ export default function TeacherDashboardPage() {
                 threshold={0.15}
                 delay={0.2}
               >
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
-                  {/* Today&apos;s Classes */}
-                  <div className="flex">
-                    <div className="w-full">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <Clock className="h-5 w-5" />
-                            Today&apos;s Classes
-                          </CardTitle>
-                          <CardDescription>Your schedule for today</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-4">
-                            {classData.map((classItem) => (
-                              <div key={classItem.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent">
-                                <div>
-                                  <h3 className="font-medium">{classItem.name}</h3>
-                                  <p className="text-sm text-muted-foreground">{classItem.time} • {classItem.room}</p>
-                                </div>
-                                <Badge variant="secondary">{classItem.students} students</Badge>
-                              </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </div>
-                  
-                  {/* Calendar */}
+                <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
+                  {/* Calendar with integrated class schedule */}
                   <div className="flex">
                     <div className="w-full">
                       <Suspense fallback={<div className="h-80 flex items-center justify-center"><Loading /></div>}>
@@ -197,7 +169,7 @@ export default function TeacherDashboardPage() {
                   </div>
                 </div>
               </AnimatedContent>
-              
+
               {/* Recent Activities */}
               <AnimatedContent
                 distance={40}
