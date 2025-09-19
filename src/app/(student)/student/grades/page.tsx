@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Download, Share2, FileText, AlertTriangle, TrendingUp, BarChart3, CheckCircle, XCircle, Clock } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
+import AnimatedContent from "@/components/animated-content"
 
 // Define types for our data
 interface SemesterData {
@@ -132,237 +133,329 @@ export default function GradesPage() {
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
             <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
               <div className="flex flex-col gap-6">
-                <div>
-                  <h1 className="text-2xl font-bold">Grades</h1>
-                  <p className="text-muted-foreground">View your academic grades and performance.</p>
-                </div>
+                {/* Page Header */}
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.05}
+                >
+                  <div>
+                    <h1 className="text-2xl font-bold">Grades</h1>
+                    <p className="text-muted-foreground">View your academic grades and performance.</p>
+                  </div>
+                </AnimatedContent>
 
                 {/* Snapshot / Overview Section */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Student Progress Snapshot</CardTitle>
-                    <CardDescription>Your overall academic performance at a glance</CardDescription>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <Card className="bg-muted/50">
-                      <CardHeader className="pb-2">
-                        <CardDescription>CGPA / SGPA</CardDescription>
-                        <CardTitle className="text-3xl">{semesterData.cumulativeGPA} / {semesterData.currentSemesterGPA}</CardTitle>
-                      </CardHeader>
-                    </Card>
-                    <Card className="bg-muted/50">
-                      <CardHeader className="pb-2">
-                        <CardDescription>Credits Earned / Required</CardDescription>
-                        <CardTitle className="text-3xl">{semesterData.creditsEarned} / {semesterData.creditsRequired}</CardTitle>
-                      </CardHeader>
-                    </Card>
-                    <Card className="bg-muted/50">
-                      <CardHeader className="pb-2">
-                        <CardDescription>Active Backlogs</CardDescription>
-                        <CardTitle className="text-3xl">{activeBacklogsCount}</CardTitle>
-                      </CardHeader>
-                    </Card>
-                    <Card className="bg-muted/50">
-                      <CardHeader className="pb-2">
-                        <CardDescription>Graduation Readiness</CardDescription>
-                        <CardTitle className="text-3xl">{semesterData.graduationPercentage}%</CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <Progress value={semesterData.graduationPercentage} className="h-2" />
-                      </CardContent>
-                    </Card>
-                    
-                    {/* Badges Section */}
-                    <div className="md:col-span-2 lg:col-span-4 flex flex-wrap gap-2">
-                      {semesterData.badges.map((badge) => (
-                        <Badge key={badge.id} variant={badge.variant as "default" | "destructive"}>
-                          {badge.text}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Semester Tabs */}
-                <Tabs defaultValue="sem1" className="w-full">
-                  <TabsList className="grid w-full grid-cols-4">
-                    {semesterTabs.map((tab) => (
-                      <TabsTrigger key={tab.id} value={tab.id}>
-                        {tab.label}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
-                  
-                  {semesterTabs.map((tab) => (
-                    <TabsContent key={tab.id} value={tab.id}>
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>{tab.label} Grades</CardTitle>
-                          <CardDescription>Detailed breakdown of your performance</CardDescription>
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.1}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Student Progress Snapshot</CardTitle>
+                      <CardDescription>Your overall academic performance at a glance</CardDescription>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <Card className="bg-muted/50">
+                        <CardHeader className="pb-2">
+                          <CardDescription>CGPA / SGPA</CardDescription>
+                          <CardTitle className="text-3xl">{semesterData.cumulativeGPA} / {semesterData.currentSemesterGPA}</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Course</TableHead>
-                                <TableHead>Credits</TableHead>
-                                <TableHead>Internal Marks</TableHead>
-                                <TableHead>External Marks</TableHead>
-                                <TableHead>Grade</TableHead>
-                                <TableHead>Status</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {gradesData[tab.id as keyof GradesData]?.map((grade: Grade) => (
-                                <TableRow key={grade.id}>
-                                  <TableCell className="font-medium">{grade.subject}</TableCell>
-                                  <TableCell>{grade.credits}</TableCell>
-                                  <TableCell>{grade.internal}</TableCell>
-                                  <TableCell>{grade.external}</TableCell>
-                                  <TableCell>{grade.finalGrade}</TableCell>
-                                  <TableCell>
-                                    {grade.status === "passed" ? (
-                                      <div className="flex items-center gap-1 text-green-600">
-                                        <CheckCircle className="h-4 w-4" />
-                                        <span>Passed</span>
-                                      </div>
-                                    ) : grade.status === "backlog" ? (
-                                      <div className="flex items-center gap-1 text-red-600">
-                                        <XCircle className="h-4 w-4" />
-                                        <span>Backlog</span>
-                                      </div>
-                                    ) : (
-                                      <div className="flex items-center gap-1 text-yellow-600">
-                                        <Clock className="h-4 w-4" />
-                                        <span>Awaiting Result</span>
-                                      </div>
-                                    )}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
+                      </Card>
+                      <Card className="bg-muted/50">
+                        <CardHeader className="pb-2">
+                          <CardDescription>Credits Earned / Required</CardDescription>
+                          <CardTitle className="text-3xl">{semesterData.creditsEarned} / {semesterData.creditsRequired}</CardTitle>
+                        </CardHeader>
+                      </Card>
+                      <Card className="bg-muted/50">
+                        <CardHeader className="pb-2">
+                          <CardDescription>Active Backlogs</CardDescription>
+                          <CardTitle className="text-3xl">{activeBacklogsCount}</CardTitle>
+                        </CardHeader>
+                      </Card>
+                      <Card className="bg-muted/50">
+                        <CardHeader className="pb-2">
+                          <CardDescription>Graduation Readiness</CardDescription>
+                          <CardTitle className="text-3xl">{semesterData.graduationPercentage}%</CardTitle>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                          <Progress value={semesterData.graduationPercentage} className="h-2" />
                         </CardContent>
                       </Card>
-                    </TabsContent>
-                  ))}
-                </Tabs>
+                      
+                      {/* Badges Section */}
+                      <div className="md:col-span-2 lg:col-span-4 flex flex-wrap gap-2">
+                        {semesterData.badges.map((badge) => (
+                          <Badge key={badge.id} variant={badge.variant as "default" | "destructive"}>
+                            {badge.text}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </AnimatedContent>
+
+                {/* Semester Tabs */}
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.15}
+                >
+                  <Tabs defaultValue="sem1" className="w-full">
+                    <TabsList className="grid w-full grid-cols-4">
+                      {semesterTabs.map((tab) => (
+                        <TabsTrigger key={tab.id} value={tab.id}>
+                          {tab.label}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                    
+                    {semesterTabs.map((tab) => (
+                      <TabsContent key={tab.id} value={tab.id}>
+                        <Card>
+                          <CardHeader>
+                            <CardTitle>{tab.label} Grades</CardTitle>
+                            <CardDescription>Detailed breakdown of your performance</CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Course</TableHead>
+                                  <TableHead>Credits</TableHead>
+                                  <TableHead>Internal Marks</TableHead>
+                                  <TableHead>External Marks</TableHead>
+                                  <TableHead>Grade</TableHead>
+                                  <TableHead>Status</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {gradesData[tab.id as keyof GradesData]?.map((grade: Grade) => (
+                                  <TableRow key={grade.id}>
+                                    <TableCell className="font-medium">{grade.subject}</TableCell>
+                                    <TableCell>{grade.credits}</TableCell>
+                                    <TableCell>{grade.internal}</TableCell>
+                                    <TableCell>{grade.external}</TableCell>
+                                    <TableCell>{grade.finalGrade}</TableCell>
+                                    <TableCell>
+                                      {grade.status === "passed" ? (
+                                        <div className="flex items-center gap-1 text-green-600">
+                                          <CheckCircle className="h-4 w-4" />
+                                          <span>Passed</span>
+                                        </div>
+                                      ) : grade.status === "backlog" ? (
+                                        <div className="flex items-center gap-1 text-red-600">
+                                          <XCircle className="h-4 w-4" />
+                                          <span>Backlog</span>
+                                        </div>
+                                      ) : (
+                                        <div className="flex items-center gap-1 text-yellow-600">
+                                          <Clock className="h-4 w-4" />
+                                          <span>Awaiting Result</span>
+                                        </div>
+                                      )}
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                    ))}
+                  </Tabs>
+                </AnimatedContent>
 
                 {/* Backlogs Section */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Backlogs</CardTitle>
-                    <CardDescription>Track your pending courses</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Subject</TableHead>
-                          <TableHead>Semester</TableHead>
-                          <TableHead>Credits</TableHead>
-                          <TableHead>Next Opportunity</TableHead>
-                          <TableHead>Impact</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {backlogsData.map((backlog) => (
-                          <TableRow key={backlog.id}>
-                            <TableCell className="font-medium">{backlog.subject}</TableCell>
-                            <TableCell>{backlog.semester}</TableCell>
-                            <TableCell>{backlog.credits}</TableCell>
-                            <TableCell>{backlog.nextOpportunity}</TableCell>
-                            <TableCell>Clearing {backlog.subject} will raise credits from {semesterData.creditsEarned} → {semesterData.creditsEarned + backlog.credits}</TableCell>
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.2}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Backlogs</CardTitle>
+                      <CardDescription>Track your pending courses</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Subject</TableHead>
+                            <TableHead>Semester</TableHead>
+                            <TableHead>Credits</TableHead>
+                            <TableHead>Next Opportunity</TableHead>
+                            <TableHead>Impact</TableHead>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
+                        </TableHeader>
+                        <TableBody>
+                          {backlogsData.map((backlog) => (
+                            <TableRow key={backlog.id}>
+                              <TableCell className="font-medium">{backlog.subject}</TableCell>
+                              <TableCell>{backlog.semester}</TableCell>
+                              <TableCell>{backlog.credits}</TableCell>
+                              <TableCell>{backlog.nextOpportunity}</TableCell>
+                              <TableCell>Clearing {backlog.subject} will raise credits from {semesterData.creditsEarned} → {semesterData.creditsEarned + backlog.credits}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </CardContent>
+                  </Card>
+                </AnimatedContent>
 
                 {/* Credits Tracker */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Credits Tracker</CardTitle>
-                    <CardDescription>Visual representation of your credit progress</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        {/* Chart visualization area - to be implemented later */}
-                        <div className="h-[200px] flex items-center justify-center bg-muted/50 rounded-lg">
-                          <p className="text-muted-foreground">Credits chart visualization will be implemented here</p>
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.25}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Credits Tracker</CardTitle>
+                      <CardDescription>Visual representation of your credit progress</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          {/* Chart visualization area - to be implemented later */}
+                          <div className="h-[200px] flex items-center justify-center bg-muted/50 rounded-lg">
+                            <p className="text-muted-foreground">Credits chart visualization will be implemented here</p>
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <div>
+                            <div className="flex justify-between mb-1">
+                              <span>Core Subjects</span>
+                              <span>{creditsData.coreSubjects}/70</span>
+                            </div>
+                            <Progress value={(creditsData.coreSubjects / 70) * 100} className="h-2" />
+                          </div>
+                          <div>
+                            <div className="flex justify-between mb-1">
+                              <span>Electives</span>
+                              <span>{creditsData.electives}/15</span>
+                            </div>
+                            <Progress value={(creditsData.electives / 15) * 100} className="h-2" />
+                            <p className="text-sm text-yellow-600 mt-1">Elective credits short by {15 - creditsData.electives}</p>
+                          </div>
+                          <div>
+                            <div className="flex justify-between mb-1">
+                              <span>Labs/Projects</span>
+                              <span>{creditsData.labs}/15</span>
+                            </div>
+                            <Progress value={(creditsData.labs / 15) * 100} className="h-2" />
+                          </div>
                         </div>
                       </div>
-                      <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between mb-1">
-                            <span>Core Subjects</span>
-                            <span>{creditsData.coreSubjects}/70</span>
-                          </div>
-                          <Progress value={(creditsData.coreSubjects / 70) * 100} className="h-2" />
-                        </div>
-                        <div>
-                          <div className="flex justify-between mb-1">
-                            <span>Electives</span>
-                            <span>{creditsData.electives}/15</span>
-                          </div>
-                          <Progress value={(creditsData.electives / 15) * 100} className="h-2" />
-                          <p className="text-sm text-yellow-600 mt-1">Elective credits short by {15 - creditsData.electives}</p>
-                        </div>
-                        <div>
-                          <div className="flex justify-between mb-1">
-                            <span>Labs/Projects</span>
-                            <span>{creditsData.labs}/15</span>
-                          </div>
-                          <Progress value={(creditsData.labs / 15) * 100} className="h-2" />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </AnimatedContent>
 
                 {/* Forecasting & Alerts */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Forecasting & Alerts</CardTitle>
-                    <CardDescription>AI-powered predictions for your academic journey</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {forecastingData.map((forecast) => (
-                      <div key={forecast.id} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                        <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
-                        <p className="text-sm">{forecast.message}</p>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.3}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Forecasting & Alerts</CardTitle>
+                      <CardDescription>AI-powered predictions for your academic journey</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {forecastingData.map((forecast) => (
+                        <div key={forecast.id} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                          <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                          <p className="text-sm">{forecast.message}</p>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                </AnimatedContent>
 
                 {/* Certificates & Downloads */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Certificates & Downloads</CardTitle>
-                    <CardDescription>Manage your academic documents</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex flex-wrap gap-4">
-                    <Button>
-                      <Download className="mr-2 h-4 w-4" />
-                      Download Transcript
-                    </Button>
-                    <Button variant="outline">
-                      <FileText className="mr-2 h-4 w-4" />
-                      Apply for Re-evaluation
-                    </Button>
-                    <Button variant="outline">
-                      <Share2 className="mr-2 h-4 w-4" />
-                      Share Secure Link
-                    </Button>
-                    <Button variant="outline">
-                      <BarChart3 className="mr-2 h-4 w-4" />
-                      Export to Excel
-                    </Button>
-                  </CardContent>
-                </Card>
+                <AnimatedContent
+                  distance={40}
+                  direction="vertical"
+                  reverse={false}
+                  duration={0.6}
+                  ease="power3.out"
+                  initialOpacity={0}
+                  animateOpacity
+                  scale={1}
+                  threshold={0.15}
+                  delay={0.35}
+                >
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Certificates & Downloads</CardTitle>
+                      <CardDescription>Manage your academic documents</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-4">
+                      <Button>
+                        <Download className="mr-2 h-4 w-4" />
+                        Download Transcript
+                      </Button>
+                      <Button variant="outline">
+                        <FileText className="mr-2 h-4 w-4" />
+                        Apply for Re-evaluation
+                      </Button>
+                      <Button variant="outline">
+                        <Share2 className="mr-2 h-4 w-4" />
+                        Share Secure Link
+                      </Button>
+                      <Button variant="outline">
+                        <BarChart3 className="mr-2 h-4 w-4" />
+                        Export to Excel
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </AnimatedContent>
               </div>
             </div>
           </div>

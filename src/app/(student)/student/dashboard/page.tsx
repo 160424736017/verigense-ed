@@ -19,16 +19,16 @@ export default function Page() {
         <div className="@container/main flex flex-1 flex-col gap-2">
           <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
             <AnimatedContent
-              distance={50}
+              distance={40}
               direction="vertical"
               reverse={false}
-              duration={0.8}
+              duration={0.6}
               ease="power3.out"
               initialOpacity={0}
               animateOpacity
               scale={1}
-              threshold={0.2}
-              delay={0.1}
+              threshold={0.15}
+              delay={0.05}
             >
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 lg:px-6">
                 <div className="flex">
@@ -48,16 +48,16 @@ export default function Page() {
               </div>
             </AnimatedContent>
             <AnimatedContent
-              distance={50}
+              distance={40}
               direction="vertical"
               reverse={false}
-              duration={0.8}
+              duration={0.6}
               ease="power3.out"
               initialOpacity={0}
               animateOpacity
               scale={1}
-              threshold={0.2}
-              delay={0.2}
+              threshold={0.15}
+              delay={0.1}
             >
               <div className="grid grid-cols-1 gap-6 px-4 lg:px-6">
                 <div className="flex">
